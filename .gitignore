@@ -1,2 +1,3 @@
 remind_me/remind_me/settings_local.py
 *.pyc
+*.log
