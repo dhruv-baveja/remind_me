@@ -26,6 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = True
 
 # Application definition
 
@@ -39,6 +40,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
+    'reminders',
+    'customers',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,6 +88,18 @@ DATABASES = {
     }
 }
 
+# Rest framework related settings
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+    ),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -130,6 +145,12 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+            'formatter' : 'verbose',
+        },
+        'reminders': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
