@@ -6,6 +6,9 @@ from rest_framework.parsers import JSONParser
 
 logger = logging.getLogger(__name__)
 
+"""
+This utility is used for fetching data from request
+"""
 def get_data_from_request(request):
 
     content = {}

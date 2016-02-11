@@ -4,6 +4,9 @@ from reminders.models import Reminder, ReminderMedium
 
 logger = logging.getLogger(__name__)
 
+"""
+This utility creates a Reminder object
+"""
 def create_reminder_object(data, customer):
 	
 	reminder = Reminder()
@@ -17,6 +20,9 @@ def create_reminder_object(data, customer):
 
 	return reminder
 
+"""
+This utility creates a ReminderMedium object
+"""
 def create_reminder_medium_object(data, reminder):
 
 	reminder_medium = ReminderMedium()

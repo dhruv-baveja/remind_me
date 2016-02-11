@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'reminders',
     'customers',
+    'generic'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -151,6 +152,12 @@ LOGGING = {
             'formatter' : 'verbose',
         },
         'reminders': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+            'formatter' : 'verbose',
+        },
+        'customers': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,

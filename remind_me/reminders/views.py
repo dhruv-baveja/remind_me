@@ -11,6 +11,9 @@ from generic.utils import get_data_from_request
 
 logger = logging.getLogger(__name__)
 
+"""
+This api view is used to save reminder
+"""
 @api_view(["POST"])
 def save_reminder(request):
 
@@ -25,12 +28,11 @@ def save_reminder(request):
 		logger.debug("Request to save reminder for %s has valid data"%(customer))
 
 		data = serializer.data
-		data['time'] = data['time'].replace("-",":")
-		
+
 		reminder = create_reminder_object(data, customer)
 		reminder_medium = create_reminder_medium_object(data, reminder)
 		
-		return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(data, status=status.HTTP_201_CREATED)
 	
 	logger.error("Invalid data in request from %s : %s"%(customer, serializer.errors))
 

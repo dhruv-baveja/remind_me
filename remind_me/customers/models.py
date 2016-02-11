@@ -8,6 +8,9 @@ from rest_framework.authtoken.models import Token
 
 logger = logging.getLogger(__name__)
 
+"""
+Customer model is used for extending user model i.e. to incorporate new fields and methods.
+"""
 class Customer(models.Model):
 
     guid =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
@@ -20,8 +23,9 @@ class Customer(models.Model):
 
         return "%s<---->%s" %(self.guid, self.user)
 
-
-# post save for creating customer and token on saving user
+"""
+Post save for creating customer and token on saving user
+"""
 def create_customer(sender, instance, created, **kwargs):
     
     if created:

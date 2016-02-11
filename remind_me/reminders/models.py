@@ -4,7 +4,9 @@ from django.db import models
 
 from customers.models import Customer
 
-
+"""
+Model for storing reminder related data
+"""
 class Reminder(models.Model):
     customer = models.ForeignKey(Customer, related_name='reminders', db_index=True)
     guid = models.UUIDField(db_index=True,primary_key=True,default=uuid.uuid4, editable=False)
@@ -17,6 +19,10 @@ class Reminder(models.Model):
     def __unicode__(self):
         return "%s<---->%s" %(self.guid, self.created_at)
 
+"""
+Model for storing reminder medium related data
+NOTE :  More mediums can be added by just adding more fields in this table 
+"""
 class ReminderMedium(models.Model):
     reminder = models.OneToOneField(Reminder, related_name='reminder', db_index=True)
     guid = models.UUIDField(db_index=True,primary_key=True,default=uuid.uuid4, editable=False)
