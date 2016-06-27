@@ -16,7 +16,6 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('guid', models.UUIDField(primary_key=True, default=uuid.uuid4, serialize=False, editable=False, db_index=True)),
                 ('phone', models.CharField(max_length=15)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),

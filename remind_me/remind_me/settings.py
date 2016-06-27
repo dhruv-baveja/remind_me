@@ -28,6 +28,8 @@ ALLOWED_HOSTS = []
 
 APPEND_SLASH = True
 
+SITE_ID = 2
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -42,7 +44,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'reminders',
     'customers',
-    'generic'
+    'generic',
+    'rest_auth',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -82,10 +85,8 @@ WSGI_APPLICATION = 'remind_me.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'remind_me',
-        'USER': 'root',
-        'PASSWORD': 'KKJh32KJOImn3329!@#ASDA',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR + '/remind_me.db'
     }
 }
 
@@ -155,7 +156,7 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
-            'formatter' : 'verbose',
+            'formatter': 'verbose',
         },
         'customers': {
             'handlers': ['file'],
@@ -167,10 +168,7 @@ LOGGING = {
 }
 
 try:
-
     from settings_local import *
-    print "settings_local imported!"
-
+    print("settings_local imported!")
 except:
-
-    print "settings_local not found!"
+    print("settings_local not found")
