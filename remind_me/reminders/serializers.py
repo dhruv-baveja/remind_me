@@ -1,30 +1,53 @@
 import datetime
+import pytz
 
 from rest_framework import serializers
 
-"""
-This serializer is used by save_reminder view, to serialize incoming data
-"""
-class SaveReminderSerializer(serializers.Serializer):
-    
-    message = serializers.CharField(allow_blank=False, required=True)
-    date = serializers.DateField(required=True, format="%Y-%m-%d")
-    time = serializers.TimeField(required=True, format="%H:%M:%S")
-    sms = serializers.BooleanField(required=True)
-    email = serializers.BooleanField(required=True)
+from reminders.models import Reminder
+from generic.utils import convert_date_time_to_iso_format
 
-    """
-    This method ensures that the reminder being set is for future only and
-    atleast one medium is being selected
-    """
-    def validate(self, data):
-        if data['sms'] == data['email'] == False:
-            
-            raise serializers.ValidationError("Atleast select 1 medium for receiving reminder")
-        
-        elif (data['date'] <= datetime.date.today() and 
-            data['time'] < (datetime.datetime.now() + datetime.timedelta(minutes=1)).time()):
-            
-            raise serializers.ValidationError("Please select a suitable date and time")
-        
+
+class ReminderSerializer(serializers.Serializer):
+
+    message = serializers.CharField(max_length=250)
+    scheduled_datetime = serializers.DateTimeField()
+    phone_number = serializers.CharField(max_length=15, allow_null=True)
+
+    @staticmethod
+    def validate(data):
+        if data['scheduled_datetime'] <= (datetime.datetime.now().replace(tzinfo=pytz.UTC) +
+                                          datetime.timedelta(seconds=30)):
+            raise serializers.ValidationError("You cannot set reminder for past")
         return data
+
+    @staticmethod
+    def update(instance, validated_data):
+        instance.message = validated_data.get('message', instance.message)
+        instance.scheduled_datetime = validated_data.get('scheduled_datetime', instance.scheduled_datetime)
+        if validated_data.get('phone_number'):
+            customer = instance.customer
+            customer.phone = validated_data.get('phone_number', customer.phone)
+            customer.save()
+        instance.save()
+        return instance
+
+    @staticmethod
+    def create(validated_data):
+        reminder = Reminder()
+        reminder.customer = validated_data['customer']
+        reminder.message = validated_data.get('message')
+        reminder.scheduled_datetime = validated_data.get('scheduled_datetime')
+        reminder.save()
+        if validated_data.get('phone_number'):
+            customer = validated_data['customer']
+            customer.phone = validated_data.get('phone_number', customer.phone)
+            customer.save()
+        return reminder
+
+    @staticmethod
+    def to_representation(instance):
+        reminder = {"phone_number": instance.customer.phone, "message": instance.message,
+                    "scheduled_datetime": convert_date_time_to_iso_format(instance.scheduled_datetime),
+                    "id": instance.id}
+        return reminder
+

@@ -15,10 +15,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Reminder',
             fields=[
-                ('guid', models.UUIDField(primary_key=True, default=uuid.uuid4, serialize=False, editable=False, db_index=True)),
                 ('message', models.TextField()),
-                ('date', models.DateField()),
-                ('time', models.TimeField()),
+                ('scheduled_datetime', models.DateTimeField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('customer', models.ForeignKey(related_name='reminders', to='customers.Customer')),

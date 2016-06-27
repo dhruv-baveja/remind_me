@@ -1,0 +1,21 @@
+# encoding: utf-8
+# This file originally created at http://rove.io/ed4f780b39f13a85e28057bf4856bf33
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "opscode_ubuntu-14.04_chef-provisionerless.box"
+  config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box"
+  config.ssh.forward_agent = true
+
+  config.vm.network :forwarded_port, guest: 8000, host: 3000
+  # Forward rabbitmq admin port
+  config.vm.network :forwarded_port, guest: 15672, host: 15671
+  config.vm.network :forwarded_port, guest: 1025, host: 1026
+  config.vm.network :forwarded_port, guest: 1080, host: 1081
+
+  config.vm.provision :shell, privileged: false, path: "dev_setup.sh"
+
+end

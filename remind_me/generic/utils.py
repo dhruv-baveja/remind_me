@@ -1,14 +1,14 @@
 import logging
 import json
+import arrow
+from dateutil.tz.tz import tzutc
 
 from rest_framework.parsers import JSONParser
 
 
 logger = logging.getLogger(__name__)
 
-"""
-This utility is used for fetching data from request
-"""
+
 def get_data_from_request(request):
 
     content = {}
@@ -34,3 +34,14 @@ def get_data_from_request(request):
 
     logger.debug("content in get_data_from_request: %s" %content)
     return content
+
+
+def convert_date_time_to_iso_format(date):
+    """
+    :param date: any valid datetime string
+    :return: ISO8601 formatted datetime string
+    """
+    arrow_dt = arrow.get(date)
+    if isinstance(arrow_dt.tzinfo, tzutc):
+        return arrow_dt.format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z'
+    return arrow_dt.format('YYYY-MM-DDTHH:mm:ss.SSSZZ')

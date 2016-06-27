@@ -1,3 +1,10 @@
 remind_me/remind_me/settings_local.py
 *.pyc
 *.log
+*.db
+.vagrant/
+node_modules/
+.sass-cache/
+css/styleScss.css.map
+css/styleScss.css
+.idea/
